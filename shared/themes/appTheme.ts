@@ -2,8 +2,8 @@ import { createTheme } from '@mui/material';
 
 export const appTheme = createTheme({
   palette: {
-    primary: { main: '#6d28d9' },
-    secondary: { main: '#4338ca' },
+    primary: { main: '#a78bfa' },
+    secondary: { main: '#818cf8' },
     info: { main: '#cbd5e1' },
     success: { main: '#22c55e' },
     error: { main: '#ef4444' },
