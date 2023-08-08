@@ -7,7 +7,9 @@ interface Props {
 function Center({ children }: Props): JSX.Element {
   return (
     <div className={styles.center}>
+      <div className={styles['center-item']} />
       <div className={styles['center-content']}>{children}</div>
+      <div className={styles['center-item']} />
     </div>
   );
 }
