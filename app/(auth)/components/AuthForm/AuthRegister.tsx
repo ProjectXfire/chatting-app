@@ -49,6 +49,7 @@ function AuthRegister(): JSX.Element {
             fullWidth
             label='Password'
             variant='outlined'
+            type='password'
             disabled={isLoading}
             error={errors.password !== undefined && touched.password}
             helperText={

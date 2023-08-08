@@ -38,6 +38,7 @@ function AuthLogin(): JSX.Element {
             label='Password'
             variant='outlined'
             disabled={isLoading}
+            type='password'
             error={errors.password !== undefined && touched.password}
             helperText={
               errors.password !== undefined && touched.password !== undefined
