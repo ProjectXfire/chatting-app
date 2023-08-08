@@ -13,6 +13,9 @@ export const appTheme = createTheme({
       paper: '#190628'
     }
   },
+  typography: {
+    fontFamily: 'inherit'
+  },
   components: {
     MuiButton: {
       styleOverrides: {
