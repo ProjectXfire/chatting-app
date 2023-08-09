@@ -1,7 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Itim } from 'next/font/google';
-import { Providers } from '@/shared/components';
+import { Providers, ToasterProvider } from '@/shared/components';
 
 const inter = Itim({ subsets: ['latin'], weight: '400' });
 
@@ -14,7 +14,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
   return (
     <html lang='en'>
       <Providers>
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <ToasterProvider />
+          {children}
+        </body>
       </Providers>
     </html>
   );
