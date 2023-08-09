@@ -1,7 +1,7 @@
 'use client';
 
-import { appTheme } from '@/shared/themes';
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import { appTheme } from '@/shared/themes';
 
 interface Props {
   children: React.ReactNode;

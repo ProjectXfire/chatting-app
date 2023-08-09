@@ -14,14 +14,14 @@ model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String?
   email String? @unique
-  emailVerified DateTime
+  emailVerified DateTime?
   image String?
   imageCode String?
   hashedPassword String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  coversationIds String[] @db.ObjectId
-  coversations Conversation[] @relation(fields: [coversationIds], references: [id])
+  conversationIds String[] @db.ObjectId
+  conversations Conversation[] @relation(fields: [conversationIds], references: [id])
   seenMessageIds String[] @db.ObjectId
   seenMessages Message[] @relation("seen",fields: [seenMessageIds], references: [id])
   accounts Account[]
@@ -34,13 +34,13 @@ model Account {
   type String
   provider String
   providerAccountId String
-  refreshToken String? @db.String
-  accessToken String? @db.String
-  expiresAt Int?
-  tokenType String?
+  refresh_token String? @db.String
+  access_token String? @db.String
+  expires_at Int?
+  token_type String?
   scope String?
-  idToken String? @db.String
-  sessionState String?
+  id_token String? @db.String
+  session_state String?
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([provider, providerAccountId])
 }
@@ -64,8 +64,8 @@ model Message {
   createdAt DateTime @default(now())
   seenIds String[] @db.ObjectId
   seen User[] @relation("seen", fields: [seenIds], references: [id])
-  coversationId String @db.ObjectId
-  conversation Conversation @relation(fields: [coversationId], references: [id], onDelete: Cascade)
+  conversationId String @db.ObjectId
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   senderId String @db.ObjectId
   sender User @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }

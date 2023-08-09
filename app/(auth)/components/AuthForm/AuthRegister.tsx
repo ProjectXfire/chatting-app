@@ -1,20 +1,31 @@
 'use client';
 
+import { useState } from 'react';
 import { Form, Formik } from 'formik';
+import toast from 'react-hot-toast';
 import styles from './AuthForm.module.css';
+import { register } from '@/app/(auth)/services';
+import { type ICreateUserDto } from '../../dtos';
 import { RegisterSchema } from '@/app/(auth)/schemas';
 import { Button, TextField } from '@mui/material';
-import { useState } from 'react';
 
 function AuthRegister(): JSX.Element {
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onRegister = async (data: ICreateUserDto): Promise<void> => {
+    setIsLoading(true);
+    const { successfulMessage, errorMessage } = await register(data);
+    if (successfulMessage !== null) toast.success(successfulMessage);
+    if (errorMessage !== null) toast.error(errorMessage);
+    setIsLoading(false);
+  };
 
   return (
     <Formik
       initialValues={{ name: '', email: '', password: '' }}
       validationSchema={RegisterSchema}
       onSubmit={(data) => {
-        console.log(data);
+        void onRegister(data);
       }}
     >
       {({ handleSubmit, getFieldProps, errors, touched }) => (

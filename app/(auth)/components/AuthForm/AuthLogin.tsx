@@ -1,20 +1,31 @@
 'use client';
 
+import { useState } from 'react';
 import { Form, Formik } from 'formik';
 import styles from './AuthForm.module.css';
-import { RegisterSchema } from '@/app/(auth)/schemas';
+import { LoginSchema } from '@/app/(auth)/schemas';
+import { signInWithCredentials } from '@/app/(auth)/services';
+import { type ILoginUserDto } from '../../dtos';
 import { Button, TextField } from '@mui/material';
-import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 function AuthLogin(): JSX.Element {
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onLogin = async (data: ILoginUserDto): Promise<void> => {
+    setIsLoading(true);
+    const { errorMessage, successfulMessage } = await signInWithCredentials(data);
+    if (errorMessage !== null) toast.error(errorMessage);
+    if (successfulMessage !== null) toast.success(successfulMessage);
+    setIsLoading(false);
+  };
 
   return (
     <Formik
-      initialValues={{ name: '', email: '', password: '' }}
-      validationSchema={RegisterSchema}
+      initialValues={{ email: '', password: '' }}
+      validationSchema={LoginSchema}
       onSubmit={(data) => {
-        console.log(data);
+        void onLogin(data);
       }}
     >
       {({ handleSubmit, getFieldProps, errors, touched }) => (
