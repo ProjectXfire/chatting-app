@@ -22,7 +22,15 @@ function AuthForm(): JSX.Element {
   return (
     <section className={styles['auth-form-container']}>
       <FormHeader imageUrl='/images/logo.png' title={formTitle} />
-      {variant === 'LOGIN' ? <AuthLogin /> : <AuthRegister />}
+      {variant === 'LOGIN' ? (
+        <AuthLogin />
+      ) : (
+        <AuthRegister
+          action={() => {
+            setVariant('LOGIN');
+          }}
+        />
+      )}
       <Button onClick={toggleVariant}>{formSelectedText}</Button>
       <Divider>
         <Typography color='secondary.main'>Or continue with</Typography>

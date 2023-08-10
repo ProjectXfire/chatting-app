@@ -2,21 +2,40 @@
 
 import { useState } from 'react';
 import { Form, Formik } from 'formik';
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import styles from './AuthForm.module.css';
-import { register } from '@/app/(auth)/services';
+import { register, signInWithCredentials } from '@/app/(auth)/services';
 import { type ICreateUserDto } from '../../dtos';
 import { RegisterSchema } from '@/app/(auth)/schemas';
 import { Button, TextField } from '@mui/material';
 
-function AuthRegister(): JSX.Element {
+interface Props {
+  action?: () => void;
+}
+
+function AuthRegister({ action }: Props): JSX.Element {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const onRegister = async (data: ICreateUserDto): Promise<void> => {
     setIsLoading(true);
     const { successfulMessage, errorMessage } = await register(data);
-    if (successfulMessage !== null) toast.success(successfulMessage);
-    if (errorMessage !== null) toast.error(errorMessage);
+    if (errorMessage !== null) {
+      toast.error(errorMessage);
+    }
+    if (successfulMessage !== null) {
+      toast.success(successfulMessage);
+      const { errorMessage: errorOnLogin } = await signInWithCredentials({
+        email: data.email,
+        password: data.password
+      });
+      if (errorOnLogin !== null) {
+        toast.error(errorOnLogin);
+      } else {
+        router.refresh();
+      }
+    }
     setIsLoading(false);
   };
 
