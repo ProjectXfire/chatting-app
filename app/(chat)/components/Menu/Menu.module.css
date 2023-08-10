@@ -1,0 +1,46 @@
+.desktop-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobile-menu {
+  width: 300px;
+  position: fixed;
+  display: flex;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-top: 1px solid var(--white);
+  background-color: var(--paper);
+}
+
+.menu-item {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: transparent;
+  transition: background-color 300ms;
+  flex: 1;
+}
+
+.no-border {
+  border-radius: 0px;
+}
+
+.active-item {
+  background-color: var(--background);
+}
+
+.menu-item:active {
+  transform: scale(0.95);
+}
+
+.menu-item:hover {
+  background-color: var(--background);
+}
+
+.menu-item a {
+  display: flex;
+}

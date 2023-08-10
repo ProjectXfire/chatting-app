@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Form, Formik } from 'formik';
 import styles from './AuthForm.module.css';
 import { LoginSchema } from '@/app/(auth)/schemas';
@@ -10,13 +11,18 @@ import { Button, TextField } from '@mui/material';
 import toast from 'react-hot-toast';
 
 function AuthLogin(): JSX.Element {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const onLogin = async (data: ILoginUserDto): Promise<void> => {
     setIsLoading(true);
     const { errorMessage, successfulMessage } = await signInWithCredentials(data);
-    if (errorMessage !== null) toast.error(errorMessage);
-    if (successfulMessage !== null) toast.success(successfulMessage);
+    if (errorMessage !== null) {
+      toast.error(errorMessage);
+    } else {
+      toast.success(successfulMessage);
+      router.refresh();
+    }
     setIsLoading(false);
   };
 
