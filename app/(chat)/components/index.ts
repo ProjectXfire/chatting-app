@@ -1,8 +1,13 @@
 export { default as ChatContainer } from './ChatContainers/ChatContainer';
 export { default as ConversationSection } from './ChatContainers/ConversationSection';
+export { default as ConversationsSection } from './ChatContainers/ConversationsSection';
+export { default as SideOptionsSection } from './ChatContainers/SideOptionsSection';
 export { default as UserSection } from './ChatContainers/UserSection';
 export { default as EmptyState } from './EmptyState/EmptyState';
+export { default as ConversationItem } from './List/ConversationItem';
+export { default as ListHeader } from './List/ListHeader';
+export { default as UserItem } from './List/UserItem';
 export { default as DesktopMenu } from './Menu/DesktopMenu';
+export { default as MenuContainer } from './Menu/MenuContainer';
 export { default as MenuItem } from './Menu/MenuItem';
 export { default as MobileMenu } from './Menu/MobileMenu';
-export { default as UserConversations } from './UserConversations/UserConversations';
