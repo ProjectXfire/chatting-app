@@ -7,7 +7,7 @@ import { handleErrorMessage } from '@/shared/helpers';
 
 export async function register(payload: ICreateUserDto): Promise<IResponse<null>> {
   try {
-    const res = await axios.post<IResponse<IUser>>('/api/register', payload);
+    const res = await axios.post<IResponse<IUser | null>>('/api/register', payload);
     const { errorMessage, successfulMessage } = res.data;
     return {
       data: null,

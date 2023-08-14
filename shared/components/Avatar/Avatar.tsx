@@ -1,3 +1,5 @@
+'use client';
+
 import styles from './Avatar.module.css';
 import { Avatar as MuiAvatar } from '@mui/material';
 

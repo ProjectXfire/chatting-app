@@ -1,31 +1,31 @@
-import { getCurrentSession } from '@/app/(auth)/services/session';
-import { getUsers } from '../../services/user';
 import { redirect } from 'next/navigation';
+import { getCurrentSession } from '@/app/(auth)/services/session';
 import {
   ChatContainer,
-  UserSection,
   ConversationSection,
+  ConversationsSection,
   SideOptionsSection
 } from '../../components';
+import { getConversations } from '../../services/conversation';
 
 interface Props {
   children: React.ReactNode;
 }
 
-async function HomeLayout({ children }: Props): Promise<JSX.Element> {
+async function ConversationsLayout({ children }: Props): Promise<JSX.Element> {
   const session = await getCurrentSession();
 
   if (session === null) redirect('/');
 
-  const users = await getUsers(session);
+  const { data } = await getConversations(session.id);
 
   return (
     <ChatContainer>
       <SideOptionsSection>
-        <UserSection user={session} users={users} />
+        <ConversationsSection conversations={data} user={session} />
       </SideOptionsSection>
       <ConversationSection>{children}</ConversationSection>
     </ChatContainer>
   );
 }
-export default HomeLayout;
+export default ConversationsLayout;

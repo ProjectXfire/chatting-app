@@ -6,7 +6,7 @@ export interface IConversation {
   name?: string | null;
   createdAt: string | Date;
   lastMessageAt: string | Date;
-  isGroup?: boolean | null;
+  isGroup: boolean;
   messages?: IMessage[];
   users?: IUser[];
   messagesIds: string[];

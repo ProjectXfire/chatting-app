@@ -1,37 +1,45 @@
 'use client';
 
-import styles from './ChatContainers.module.css';
 import { useRoutes } from '../../hooks';
 import { type IUser } from '../../interfaces';
-import { DesktopMenu, MobileMenu, UserConversations } from '..';
+import { SIDEBAR_WIDTH } from '@/shared/helpers';
+import { DesktopMenu, ListHeader, MenuContainer, MobileMenu, UserItem } from '..';
+import { Box, List } from '@mui/material';
 import { Avatar, Sidebar } from '@/shared/components';
 
 interface Props {
   user: IUser;
+  users: IUser[];
 }
 
-function UserSection({ user }: Props): JSX.Element {
+function UserSection({ user, users }: Props): JSX.Element {
   const { routes } = useRoutes();
 
   return (
     <>
       <Sidebar>
-        <div className={styles['user-section__mb-options']}>
-          <div style={{ position: 'absolute', width: '300px' }}>
-            <UserConversations />
+        <Box sx={{ width: SIDEBAR_WIDTH, position: 'relative' }}>
+          <Box sx={{ width: SIDEBAR_WIDTH, position: 'absolute' }}>
+            <List sx={{ maxHeight: 'calc(100vh - 60px)', overflowY: 'auto' }} disablePadding>
+              {users.map((u) => (
+                <UserItem key={u.id} user={u} />
+              ))}
+            </List>
             <MobileMenu routes={routes} />
-          </div>
-        </div>
+          </Box>
+        </Box>
       </Sidebar>
-      <div className={styles['user-section']}>
-        <div className={styles['user-section__options']}>
-          <DesktopMenu routes={routes} />
-          <Avatar imagePath={user.image} />
-        </div>
-        <div className={styles['user-section__chats']}>
-          <UserConversations />
-        </div>
-      </div>
+      <MenuContainer
+        MenuOptions={<DesktopMenu routes={routes} />}
+        Avatar={<Avatar imagePath={user.image} />}
+      >
+        <ListHeader title='People' />
+        <List sx={{ maxHeight: 'calc(100vh - 60px)', overflowY: 'auto' }} disablePadding>
+          {users.map((u) => (
+            <UserItem key={u.id} user={u} />
+          ))}
+        </List>
+      </MenuContainer>
     </>
   );
 }
