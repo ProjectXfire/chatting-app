@@ -3,9 +3,10 @@
 import { useRoutes } from '../../hooks';
 import { type IUser } from '../../interfaces';
 import { SIDEBAR_WIDTH } from '@/shared/helpers';
+import { Box, Drawer, List } from '@mui/material';
+import { useSidebar } from '@/shared/states';
+import { Avatar } from '@/shared/components';
 import { DesktopMenu, ListHeader, MenuContainer, MobileMenu, UserItem } from '..';
-import { Box, List } from '@mui/material';
-import { Avatar, Sidebar } from '@/shared/components';
 
 interface Props {
   user: IUser;
@@ -14,10 +15,11 @@ interface Props {
 
 function UserSection({ user, users }: Props): JSX.Element {
   const { routes } = useRoutes();
+  const { isOpen, close } = useSidebar();
 
   return (
     <>
-      <Sidebar>
+      <Drawer open={isOpen} onClose={close}>
         <Box sx={{ width: SIDEBAR_WIDTH, position: 'relative' }}>
           <Box sx={{ width: SIDEBAR_WIDTH, position: 'absolute' }}>
             <List sx={{ maxHeight: 'calc(100vh - 60px)', overflowY: 'auto' }} disablePadding>
@@ -28,7 +30,7 @@ function UserSection({ user, users }: Props): JSX.Element {
             <MobileMenu routes={routes} />
           </Box>
         </Box>
-      </Sidebar>
+      </Drawer>
       <MenuContainer
         MenuOptions={<DesktopMenu routes={routes} />}
         Avatar={<Avatar imagePath={user.image} />}

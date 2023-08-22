@@ -5,6 +5,32 @@ import { type IResponse } from '@/shared/interfaces';
 import { type IConversation } from '@/app/(chat)/interfaces';
 import { type ICreateConversationDto } from '@/app/(chat)/dtos';
 
+export async function GET(req: NextRequest): Promise<NextResponse<IResponse<IConversation[]>>> {
+  try {
+    const { searchParams } = new URL(req.url);
+    const sessionId = searchParams.get('sessionId');
+    if (sessionId === undefined)
+      return NextResponse.json(
+        { data: [], successfulMessage: null, errorMessage: 'Invalid email param' },
+        { status: 400 }
+      );
+    const conversations = await prismaDb.conversation.findMany({
+      orderBy: { lastMessageAt: 'desc' },
+      where: { userIds: { has: sessionId } },
+      include: { users: true, messages: { include: { sender: true, seen: true } } }
+    });
+    return NextResponse.json(
+      { data: conversations, successfulMessage: 'User loaded successfully', errorMessage: null },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { data: [], successfulMessage: null, errorMessage: 'Error on get user' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(
   req: NextRequest,
   res: NextResponse

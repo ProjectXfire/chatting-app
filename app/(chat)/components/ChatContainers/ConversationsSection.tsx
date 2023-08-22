@@ -6,8 +6,9 @@ import { useModal } from '@/shared/states/modal';
 import { SIDEBAR_WIDTH } from '@/shared/helpers';
 import { ConversationItem, DesktopMenu, ListHeader, MenuContainer, MobileMenu } from '..';
 import { GroupAdd } from '@mui/icons-material';
-import { Box, List } from '@mui/material';
-import { Avatar, Modal, Sidebar } from '@/shared/components';
+import { Box, Drawer, List } from '@mui/material';
+import { Avatar } from '@/shared/components';
+import { useSidebar } from '@/shared/states';
 
 interface Props {
   user: IUser;
@@ -16,16 +17,21 @@ interface Props {
 
 function ConversationsSection({ user, conversations }: Props): JSX.Element {
   const { routes } = useRoutes();
-  const { open } = useModal();
+  const { open, setComponent } = useModal();
+  const { isOpen, close } = useSidebar();
 
   return (
     <>
-      <Modal title='Add a new group conversation' onSave={() => {}}>
-        Conversation
-      </Modal>
-      <Sidebar>
+      <Drawer open={isOpen} onClose={close}>
         <Box sx={{ width: SIDEBAR_WIDTH, position: 'relative' }}>
           <Box sx={{ width: SIDEBAR_WIDTH, position: 'absolute' }}>
+            <ListHeader
+              title='Messages'
+              Icon={<GroupAdd />}
+              iconAction={() => {
+                open();
+              }}
+            />
             <List sx={{ maxHeight: 'calc(100vh - 60px)', overflowY: 'auto' }} disablePadding>
               {conversations.map((i) => (
                 <ConversationItem key={i.id} conversation={i} sessionId={user.id} />
@@ -34,7 +40,7 @@ function ConversationsSection({ user, conversations }: Props): JSX.Element {
             <MobileMenu routes={routes} />
           </Box>
         </Box>
-      </Sidebar>
+      </Drawer>
       <MenuContainer
         MenuOptions={<DesktopMenu routes={routes} />}
         Avatar={<Avatar imagePath={user.image} />}
@@ -43,6 +49,7 @@ function ConversationsSection({ user, conversations }: Props): JSX.Element {
           title='Messages'
           Icon={<GroupAdd />}
           iconAction={() => {
+            setComponent(<h1>My component</h1>);
             open();
           }}
         />

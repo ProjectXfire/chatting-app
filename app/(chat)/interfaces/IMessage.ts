@@ -13,3 +13,8 @@ export interface IMessage {
   sender?: IUser;
   senderId: string;
 }
+
+export interface IUploadImage {
+  public_id: string;
+  secure_url: string;
+}

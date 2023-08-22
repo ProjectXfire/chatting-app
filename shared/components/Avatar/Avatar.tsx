@@ -5,9 +5,10 @@ import { Avatar as MuiAvatar } from '@mui/material';
 
 interface Props {
   imagePath: string | null | undefined;
+  isActive?: boolean;
 }
 
-function Avatar({ imagePath }: Props): JSX.Element {
+function Avatar({ imagePath, isActive }: Props): JSX.Element {
   return (
     <div className={styles.avatar}>
       {imagePath === null || imagePath === undefined ? (

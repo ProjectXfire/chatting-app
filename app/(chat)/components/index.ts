@@ -3,6 +3,7 @@ export { default as ConversationSection } from './ChatContainers/ConversationSec
 export { default as ConversationsSection } from './ChatContainers/ConversationsSection';
 export { default as SideOptionsSection } from './ChatContainers/SideOptionsSection';
 export { default as UserSection } from './ChatContainers/UserSection';
+export { default as ConversationHeader } from './ConversationHeader/ConversationHeader';
 export { default as EmptyState } from './EmptyState/EmptyState';
 export { default as ConversationItem } from './List/ConversationItem';
 export { default as ListHeader } from './List/ListHeader';
@@ -11,3 +12,7 @@ export { default as DesktopMenu } from './Menu/DesktopMenu';
 export { default as MenuContainer } from './Menu/MenuContainer';
 export { default as MenuItem } from './Menu/MenuItem';
 export { default as MobileMenu } from './Menu/MobileMenu';
+export { default as MessageBox } from './Mesages/MessageBox';
+export { default as MessageInput } from './Mesages/MessageInput';
+export { default as Messages } from './Mesages/Messages';
+export { default as UploadImage } from './UploadImage/UploadImage';
