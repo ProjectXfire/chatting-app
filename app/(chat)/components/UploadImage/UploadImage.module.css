@@ -1,0 +1,42 @@
+.upload-image {
+  width: 250px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.upload-image__box {
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--white);
+  cursor: pointer;
+}
+
+.upload-image__actions {
+  display: flex;
+  align-self: flex-end;
+  gap: 5px;
+}
+
+.preview-image {
+  object-fit: contain;
+}
+
+.hide-input {
+  display: none;
+}
+
+@media (min-width: 425px) {
+  .upload-image {
+    width: 300px;
+  }
+  .upload-image__box {
+    width: 270px;
+    height: 270px;
+  }
+}

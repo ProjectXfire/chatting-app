@@ -5,10 +5,10 @@ import { type IUser } from '@/app/(chat)/interfaces';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: { userId: string } }
 ): Promise<NextResponse<IResponse<IUser | null>>> {
   try {
-    const email = params.slug;
+    const email = params.userId;
     if (email === undefined)
       return NextResponse.json(
         { data: null, successfulMessage: null, errorMessage: 'Invalid email param' },

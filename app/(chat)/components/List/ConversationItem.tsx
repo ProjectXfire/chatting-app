@@ -5,25 +5,21 @@ import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import styles from './List.module.css';
 import { type IMessage, type IConversation } from '../../interfaces';
+import { useSidebar } from '@/shared/states';
+import { useOtherUser } from '../../hooks';
 import { maxString } from '@/shared/helpers';
 import { ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography } from '@mui/material';
 import { Avatar } from '@/shared/components';
 
 interface Props {
-  sessionId?: string;
+  sessionId: string;
   conversation: IConversation;
 }
 
 function ConversationItem({ conversation, sessionId }: Props): JSX.Element {
   const router = useRouter();
-
-  const otherUser = useMemo(() => {
-    const user = conversation.users?.filter((user) => user.id !== sessionId)[0];
-    if (user === undefined) {
-      return null;
-    }
-    return user;
-  }, []);
+  const { close } = useSidebar();
+  const { otherUser } = useOtherUser(conversation, sessionId);
 
   const lastMessage = useMemo<IMessage | undefined>(() => {
     const messages = conversation.messages ?? [];
@@ -38,12 +34,13 @@ function ConversationItem({ conversation, sessionId }: Props): JSX.Element {
 
   const lastMessageText = useMemo(() => {
     if (lastMessage === undefined) return 'Started a conversation';
-    if (lastMessage.image === null || lastMessage.image === undefined) return 'Sent an image';
+    if (lastMessage.image !== null && lastMessage.image !== undefined) return 'Sent an image';
     return lastMessage.body;
   }, []);
 
   const openConversation = async (id: string): Promise<void> => {
     router.push(`/conversations/${id}`);
+    close();
   };
 
   return (
@@ -71,8 +68,8 @@ function ConversationItem({ conversation, sessionId }: Props): JSX.Element {
         <ListItemText
           primary={conversation.name ?? otherUser?.name}
           secondary={
-            <span className={hasSeen ? styles['no-seen'] : ''}>
-              {maxString(lastMessageText ?? '', 22)}
+            <span className={hasSeen ? '' : styles['no-seen']}>
+              {maxString(lastMessageText ?? '', 13)}
             </span>
           }
         />

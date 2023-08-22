@@ -21,3 +21,13 @@ export async function getCurrentSession(): Promise<IUser | null> {
     return null;
   }
 }
+
+export async function getOnlySession(): Promise<Session | null> {
+  try {
+    const session = await getSession();
+    if (session === null || session.user === undefined) return null;
+    return session;
+  } catch (error) {
+    return null;
+  }
+}

@@ -7,6 +7,7 @@ import {
   SideOptionsSection
 } from '../../components';
 import { getConversations } from '../../services/conversation';
+import { Modal } from '@/shared/components';
 
 interface Props {
   children: React.ReactNode;
@@ -21,6 +22,7 @@ async function ConversationsLayout({ children }: Props): Promise<JSX.Element> {
 
   return (
     <ChatContainer>
+      <Modal />
       <SideOptionsSection>
         <ConversationsSection conversations={data} user={session} />
       </SideOptionsSection>

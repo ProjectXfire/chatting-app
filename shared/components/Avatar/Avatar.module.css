@@ -14,3 +14,14 @@
   border-radius: 50%;
   background-color: var(--success);
 }
+
+.avatar-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar-card p:nth-child(1) {
+  color: var(--secondary);
+  font-weight: bold;
+}

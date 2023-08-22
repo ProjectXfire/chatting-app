@@ -6,7 +6,7 @@ import { handleErrorMessage } from '@/shared/helpers';
 export async function getConversations(sessionId: string): Promise<IResponse<IConversation[]>> {
   try {
     const res = await axios.get<IResponse<IConversation[]>>(
-      `${process.env.WEBSITE_URL ?? ''}/api/users/${sessionId}/conversations`
+      `${process.env.WEBSITE_URL ?? ''}/api/conversations?sessionId=${sessionId}`
     );
     const { data } = res.data;
     return {
@@ -38,6 +38,29 @@ export async function startOrCreateConversation(
     return {
       data,
       successfulMessage: 'Conversation created',
+      errorMessage: null
+    };
+  } catch (error) {
+    const errorMessage = handleErrorMessage(error);
+    return {
+      data: null,
+      successfulMessage: null,
+      errorMessage
+    };
+  }
+}
+
+export async function getConversation(
+  conversationId: string
+): Promise<IResponse<IConversation | null>> {
+  try {
+    const res = await axios.get<IResponse<IConversation | null>>(
+      `${process.env.WEBSITE_URL ?? ''}/api/conversations/${conversationId}`
+    );
+    const { data } = res.data;
+    return {
+      data,
+      successfulMessage: 'Conversation loaded successfully',
       errorMessage: null
     };
   } catch (error) {

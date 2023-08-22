@@ -10,3 +10,13 @@ export const useSidebar = create<ISidebar>((set) => ({
     set({ isOpen: false });
   }
 }));
+
+export const useRightSidebar = create<ISidebar>((set) => ({
+  isOpen: false,
+  open: () => {
+    set({ isOpen: true });
+  },
+  close: () => {
+    set({ isOpen: false });
+  }
+}));
