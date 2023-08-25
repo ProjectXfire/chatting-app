@@ -7,7 +7,8 @@
   justify-content: space-between;
   align-items: center;
   border-right: 1.5px solid var(--white);
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .list {
@@ -21,8 +22,8 @@
 }
 
 .mobile-menu {
-  width: 300px;
-  position: fixed;
+  height: 50px;
+  position: absolute;
   display: flex;
   left: 0;
   right: 0;
@@ -32,9 +33,11 @@
 }
 
 .menu-item {
+  height: 100%;
   display: flex;
   justify-content: center;
-  padding: 10px;
+  align-items: center;
+  padding: 5px;
   border-radius: 4px;
   background-color: transparent;
   transition: background-color 300ms;

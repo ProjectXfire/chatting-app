@@ -38,3 +38,34 @@ export async function GET(
     );
   }
 }
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+): Promise<NextResponse<IResponse<null>>> {
+  try {
+    const { userId } = params;
+    if (userId === undefined) {
+      return NextResponse.json(
+        { data: null, successfulMessage: null, errorMessage: 'Invalid user id' },
+        { status: 200 }
+      );
+    }
+    const { name, image, imageCode } = await req.json();
+    if (name === undefined || image === undefined || imageCode === undefined)
+      return NextResponse.json(
+        { data: null, successfulMessage: null, errorMessage: 'Some values are missing' },
+        { status: 200 }
+      );
+    await prismaDb.user.update({ where: { id: userId }, data: { image, imageCode, name } });
+    return NextResponse.json(
+      { data: null, successfulMessage: 'User updated', errorMessage: null },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { data: null, successfulMessage: null, errorMessage: 'Error on update user' },
+      { status: 500 }
+    );
+  }
+}

@@ -97,8 +97,8 @@ export async function PATCH(req: NextRequest): Promise<NextResponse<IResponse<IM
     });
     if (messages.length === 0)
       return NextResponse.json(
-        { data: null, successfulMessage: null, errorMessage: 'Conversation id invalid' },
-        { status: 400 }
+        { data: null, successfulMessage: 'No message found to update', errorMessage: null },
+        { status: 200 }
       );
     const messageUpdated = await prismaDb.message.update({
       where: { id: messages[0].id },

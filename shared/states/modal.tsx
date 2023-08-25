@@ -11,6 +11,6 @@ export const useModal = create<IModal>((set) => ({
     set({ isOpen: true });
   },
   close: () => {
-    set({ isOpen: false });
+    set({ isOpen: false, Component: <></> });
   }
 }));

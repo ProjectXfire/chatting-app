@@ -1,0 +1,42 @@
+.profile-settings {
+  width: 100%;
+  min-height: 200px;
+  padding: 20px;
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+@media (min-width: 600px) {
+  .profile-settings {
+    width: 500px;
+  }
+}
+
+.profile-settings-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.profile-settings__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-input-photo {
+  display: flex;
+  gap: 10px;
+}
+
+.profile-settings__actions {
+  display: flex;
+  align-self: flex-end;
+  gap: 10px;
+}
+
+.hide-input {
+  display: none;
+}

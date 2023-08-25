@@ -2,5 +2,6 @@ export interface ICreateConversationDto {
   userId?: string;
   name?: string;
   isGroup?: boolean;
-  members?: any[];
+  members?: string[];
+  sessionId?: string;
 }

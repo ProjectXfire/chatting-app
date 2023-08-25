@@ -1,0 +1,41 @@
+.create-conversation {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+@media (min-width: 500px) {
+  .create-conversation {
+    width: 400px;
+  }
+}
+
+@media (min-width: 600px) {
+  .create-conversation {
+    width: 500px;
+  }
+}
+
+.create-conversation__header {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-conversation__form {
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
+}
+
+.create-conversation__inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.create-conversation__actions {
+  display: flex;
+  align-self: flex-end;
+  gap: 8px;
+}

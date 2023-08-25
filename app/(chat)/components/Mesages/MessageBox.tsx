@@ -17,10 +17,6 @@ interface Props {
 }
 
 function MessageBox({ message, pos = 'left', isLast, sessionId }: Props): JSX.Element {
-  /* const seenList = (message.seen ?? [])
-    .filter((user) => user.id !== sessionId)
-    .map((user) => user.name)
-    .join(', '); */
   const isRight = pos === 'right';
   const isText = typeof message.body === 'string';
 

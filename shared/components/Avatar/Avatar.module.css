@@ -4,6 +4,19 @@
   position: relative;
 }
 
+.avatar-group {
+  width: 45px;
+  height: 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-group div:nth-child(2) {
+  display: flex;
+  gap: 2px;
+}
+
 .active {
   width: 10px;
   height: 10px;

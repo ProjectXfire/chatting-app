@@ -4,10 +4,11 @@ import { useMemo } from 'react';
 import styles from './ConversationHeader.module.css';
 import { type IConversation } from '../../interfaces';
 import { useOtherUser } from '../../hooks';
+import { useRightSidebar, useSidebar } from '@/shared/states';
 import { MoreHoriz, KeyboardArrowLeft } from '@mui/icons-material';
 import { Drawer, IconButton } from '@mui/material';
-import { AvatarCard } from '@/shared/components';
-import { useRightSidebar, useSidebar } from '@/shared/states';
+import { Avatar, AvatarCard } from '@/shared/components';
+import { ChatSettings } from '..';
 
 interface Props {
   conversation: IConversation;
@@ -25,6 +26,10 @@ function ConversationHeader({ conversation, sessionId }: Props): JSX.Element {
     return 'Active';
   }, []);
 
+  const onOpenRightMenu = (): void => {
+    openChatMenu();
+  };
+
   return (
     <header className={styles['conversation-header-container']}>
       <nav className={styles['conversation-header']}>
@@ -32,18 +37,20 @@ function ConversationHeader({ conversation, sessionId }: Props): JSX.Element {
           <IconButton type='button' size='large' color='primary' onClick={open}>
             <KeyboardArrowLeft />
           </IconButton>
-          <AvatarCard
-            imagePath={otherUser?.image}
-            title={conversation.name ?? otherUser?.name}
-            subtitle={statusText}
-          />
+          <AvatarCard title={conversation.name ?? otherUser?.name} subtitle={statusText}>
+            {conversation.isGroup ? (
+              <Avatar multipleImage={conversation.users} />
+            ) : (
+              <Avatar imagePath={otherUser?.image} />
+            )}
+          </AvatarCard>
         </div>
-        <IconButton type='button' size='large' color='primary' onClick={openChatMenu}>
+        <IconButton type='button' size='large' color='primary' onClick={onOpenRightMenu}>
           <MoreHoriz />
         </IconButton>
       </nav>
       <Drawer open={isOpen} anchor='right' onClose={close}>
-        Menu
+        <ChatSettings conversation={conversation} sessionId={sessionId} />
       </Drawer>
     </header>
   );
