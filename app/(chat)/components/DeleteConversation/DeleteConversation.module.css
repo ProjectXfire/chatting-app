@@ -1,0 +1,25 @@
+.delete-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.delete-conversation {
+  padding: 20px;
+  padding-top: 50px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.delete-conversation__text {
+  display: flex;
+  gap: 20px;
+}
+
+.delete-conversation__actions {
+  display: flex;
+  gap: 10px;
+  align-self: flex-end;
+}

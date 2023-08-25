@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { type IResponse } from '@/shared/interfaces';
-import { type IUploadImage, type IMessage } from '../interfaces';
+import { type IMessage } from '../interfaces';
 import { handleErrorMessage } from '@/shared/helpers';
 
 export async function getMessages(conversationId: string): Promise<IResponse<IMessage[]>> {
@@ -47,34 +47,6 @@ export async function createMessage(
       data: null,
       successfulMessage: null,
       errorMessage
-    };
-  }
-}
-
-export async function uploadImage(imageFile: File): Promise<IResponse<IUploadImage | null>> {
-  try {
-    const formData = new FormData();
-    formData.append('files', imageFile);
-    const res = await axios.post<IUploadImage[]>(
-      `${process.env.NEXT_PUBLIC_UPLOAD_SERVER_URL ?? ''}/cloudinary/upload?folder=chatting`,
-      formData
-    );
-    if (res.data.length === 0)
-      return {
-        data: null,
-        successfulMessage: null,
-        errorMessage: 'Error on save image'
-      };
-    return {
-      data: res.data[0],
-      errorMessage: null,
-      successfulMessage: 'Image uploaded successfully'
-    };
-  } catch (error) {
-    return {
-      data: null,
-      successfulMessage: null,
-      errorMessage: 'Error on save image'
     };
   }
 }

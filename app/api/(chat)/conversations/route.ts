@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import prismaDb from '@/shared/libs/prismadb';
-import { getCurrentSession } from '@/app/(auth)/services/session';
 import { type IResponse } from '@/shared/interfaces';
 import { type IConversation } from '@/app/(chat)/interfaces';
 import { type ICreateConversationDto } from '@/app/(chat)/dtos';
@@ -36,14 +35,13 @@ export async function POST(
   res: NextResponse
 ): Promise<NextResponse<IResponse<IConversation | null>>> {
   try {
-    const currentSession = await getCurrentSession();
-    if (currentSession === null)
+    const body = await req.json();
+    const { userId, sessionId, isGroup, members, name } = body as ICreateConversationDto;
+    if (sessionId === undefined)
       return NextResponse.json(
         { data: null, successfulMessage: null, errorMessage: 'Unauthorized' },
         { status: 401 }
       );
-    const body = await req.json();
-    const { userId, isGroup, members, name } = body as ICreateConversationDto;
     if (isGroup === undefined)
       return NextResponse.json(
         { data: null, successfulMessage: null, errorMessage: 'Must specify if is a group or not' },
@@ -61,7 +59,7 @@ export async function POST(
           name,
           isGroup,
           users: {
-            connect: [...members.map((m) => ({ id: m.value })), { id: currentSession.id }]
+            connect: [...members.map((m) => ({ id: m })), { id: sessionId }]
           }
         },
         include: { users: true }
@@ -84,8 +82,8 @@ export async function POST(
     const existingConversations = await prismaDb.conversation.findMany({
       where: {
         OR: [
-          { userIds: { equals: [currentSession.id, userId] } },
-          { userIds: { equals: [userId, currentSession.id] } }
+          { userIds: { equals: [sessionId, userId] } },
+          { userIds: { equals: [userId, sessionId] } }
         ]
       }
     });
@@ -100,7 +98,7 @@ export async function POST(
       );
 
     const newSingleConversation = await prismaDb.conversation.create({
-      data: { users: { connect: [{ id: currentSession.id }, { id: userId }] }, isGroup },
+      data: { users: { connect: [{ id: sessionId }, { id: userId }] }, isGroup },
       include: { users: true }
     });
     return NextResponse.json(

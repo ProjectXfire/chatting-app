@@ -1,19 +1,17 @@
 'use client';
 
 import styles from './Avatar.module.css';
-import Avatar from './Avatar';
 
 interface Props {
   title?: string | null;
   subtitle?: string;
-  imagePath: string | null | undefined;
-  isActive?: boolean;
+  children: React.ReactNode;
 }
 
-function AvatarCard({ imagePath, isActive, title, subtitle }: Props): JSX.Element {
+function AvatarCard({ title, subtitle, children }: Props): JSX.Element {
   return (
     <div className={styles['avatar-card']}>
-      <Avatar imagePath={imagePath} isActive={isActive} />
+      {children}
       <div>
         <p>{title}</p>
         <p>{subtitle}</p>

@@ -63,7 +63,11 @@ function ConversationItem({ conversation, sessionId }: Props): JSX.Element {
         }}
       >
         <ListItemAvatar>
-          <Avatar imagePath={otherUser?.image} />
+          {conversation.isGroup ? (
+            <Avatar multipleImage={conversation.users} />
+          ) : (
+            <Avatar imagePath={otherUser?.image} />
+          )}
         </ListItemAvatar>
         <ListItemText
           primary={conversation.name ?? otherUser?.name}

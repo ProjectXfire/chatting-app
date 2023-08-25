@@ -17,12 +17,12 @@ async function HomeLayout({ children }: Props): Promise<JSX.Element> {
 
   if (session === null) redirect('/');
 
-  const users = await getUsers(session);
+  const users = await getUsers(session.id);
 
   return (
     <ChatContainer>
       <SideOptionsSection>
-        <UserSection user={session} users={users} />
+        <UserSection session={session} users={users} />
       </SideOptionsSection>
       <ConversationSection>{children}</ConversationSection>
     </ChatContainer>

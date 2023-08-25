@@ -5,15 +5,15 @@ import { type IUser } from '@/app/(chat)/interfaces';
 
 export async function POST(req: NextRequest): Promise<NextResponse<IResponse<IUser[]>>> {
   try {
-    const { email } = await req.json();
-    if (email === null || email === undefined)
+    const { id } = await req.json();
+    if (id === null || id === undefined)
       return NextResponse.json(
         { data: [], successfulMessage: null, errorMessage: 'Unauthorized' },
         { status: 400 }
       );
     const users = await prismaDb.user.findMany({
       orderBy: { createdAt: 'asc' },
-      where: { NOT: { email } },
+      where: { NOT: { id } },
       select: {
         id: true,
         name: true,

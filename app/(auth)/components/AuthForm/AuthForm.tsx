@@ -11,7 +11,7 @@ function AuthForm(): JSX.Element {
   const [variant, setVariant] = useState<TVariant>('LOGIN');
 
   const formSelectedText =
-    variant === 'LOGIN' ? 'Already have an account? Click here' : 'Login here';
+    variant === 'LOGIN' ? 'Create new account click here' : 'Already have an account? Click here';
   const formTitle = variant === 'LOGIN' ? 'Sign into your account' : 'Create a new account';
 
   const toggleVariant = (): void => {
