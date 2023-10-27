@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
 import prismaDb from '@/shared/libs/prismadb';
+import { pusherServer } from '@/shared/libs/pusher';
 import { type IResponse } from '@/shared/interfaces';
 import { type IMessage } from '@/app/(chat)/interfaces';
 
@@ -59,13 +60,20 @@ export async function POST(req: NextRequest): Promise<NextResponse<IResponse<nul
       },
       include: { seen: true, sender: true }
     });
-    await prismaDb.conversation.update({
+    const updatedConversation = await prismaDb.conversation.update({
       where: { id: conversationId },
       data: {
         lastMessageAt: new Date(),
         messages: { connect: { id: newMessage.id } }
       },
       include: { users: true, messages: { include: { seen: true } } }
+    });
+    await pusherServer.trigger(conversationId, 'message:new', newMessage);
+    updatedConversation.users.forEach((user) => {
+      void pusherServer.trigger(user.id, 'conversation:lastseen', {
+        conversationId,
+        messages: [newMessage]
+      });
     });
     return NextResponse.json(
       {
@@ -108,13 +116,17 @@ export async function PATCH(req: NextRequest): Promise<NextResponse<IResponse<IM
         sender: true
       }
     });
+    await pusherServer.trigger(userId, 'conversation:lastseen', {
+      conversationId,
+      messages: [messageUpdated]
+    });
     return NextResponse.json(
       {
         data: messageUpdated,
         successfulMessage: 'Message updated successfully',
         errorMessage: null
       },
-      { status: 201 }
+      { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(

@@ -1,13 +1,13 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import styles from './ChatContainers.module.css';
 import { type IUser } from '../../interfaces';
 import { useRoutes } from '../../hooks';
 import { startOrCreateConversation } from '../../services';
 import { Box, Drawer, List } from '@mui/material';
 import { useSidebar } from '@/shared/states';
-import { Avatar } from '@/shared/components';
-import { DesktopMenu, ListHeader, MenuContainer, MobileMenu, UserItem } from '..';
+import { ListHeader, MobileMenu, UserItem } from '..';
 
 interface Props {
   session: IUser;
@@ -25,7 +25,9 @@ function UserSection({ session, users }: Props): JSX.Element {
       sessionId: session.id,
       isGroup: false
     });
-    if (data !== null) router.push(`/conversations/${userId}`);
+    if (data !== null) {
+      router.push(`/conversations?id=${data.id}`);
+    }
     close();
   };
 
@@ -41,6 +43,7 @@ function UserSection({ session, users }: Props): JSX.Element {
           }}
         >
           <List sx={{ maxHeight: 'calc(100vh - 45px)', overflowY: 'auto' }} disablePadding>
+            <ListHeader title='People' />
             {users.map((u) => (
               <UserItem
                 key={u.id}
@@ -54,10 +57,7 @@ function UserSection({ session, users }: Props): JSX.Element {
           <MobileMenu routes={routes} session={session} />
         </Box>
       </Drawer>
-      <MenuContainer
-        MenuOptions={<DesktopMenu routes={routes} />}
-        Avatar={<Avatar imagePath={session.image} />}
-      >
+      <section className={styles['chat-list']}>
         <ListHeader title='People' />
         <List sx={{ maxHeight: 'calc(100vh - 60px)', overflowY: 'auto' }} disablePadding>
           {users.map((u) => (
@@ -70,7 +70,7 @@ function UserSection({ session, users }: Props): JSX.Element {
             />
           ))}
         </List>
-      </MenuContainer>
+      </section>
     </>
   );
 }

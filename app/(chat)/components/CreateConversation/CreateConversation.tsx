@@ -46,7 +46,7 @@ function CreateConversation({ user }: Props): JSX.Element {
     });
     if (successfulMessage !== null && data !== null) {
       toast.success(successfulMessage);
-      router.push(`/conversations/${data?.id}`);
+      router.push(`/conversations?id=${data?.id}`);
       router.refresh();
       close();
     } else {

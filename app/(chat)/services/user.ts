@@ -22,35 +22,47 @@ export async function updateUser(
   payload: IUpdateUserDto
 ): Promise<IResponse<null>> {
   try {
-    const { name, image, imageCode } = payload;
+    const { name, image, imageCode, online } = payload;
     if (typeof imageCode === 'string') {
       await removeImage([{ public_id: imageCode, secure_url: 'image' }]);
     }
-    if (image === undefined || image == null) {
+
+    if (image !== undefined && image !== null) {
+      const resImage = await uploadImage(image);
+      const { data, errorMessage } = resImage;
+      if (data === null)
+        return {
+          data: null,
+          successfulMessage: null,
+          errorMessage
+        };
+      const resUser = await axios.patch<IResponse<null>>(`/api/users/${sessionId}`, {
+        name,
+        image: data.secure_url,
+        imageCode: data.public_id
+      });
+      const { successfulMessage } = resUser.data;
       return {
         data: null,
-        successfulMessage: null,
-        errorMessage: 'Missing image file'
+        successfulMessage,
+        errorMessage: null
       };
     }
-    const resImage = await uploadImage(image);
-    const { data, errorMessage } = resImage;
-    if (data === null)
+    if (typeof online === 'boolean') {
+      const resUser = await axios.patch<IResponse<null>>(`/api/users/${sessionId}`, {
+        online
+      });
+      const { successfulMessage } = resUser.data;
       return {
         data: null,
-        successfulMessage: null,
-        errorMessage
+        successfulMessage,
+        errorMessage: null
       };
-    const resUser = await axios.patch<IResponse<null>>(`/api/users/${sessionId}`, {
-      name,
-      image: data.secure_url,
-      imageCode: data.public_id
-    });
-    const { successfulMessage } = resUser.data;
+    }
     return {
       data: null,
-      successfulMessage,
-      errorMessage: null
+      successfulMessage: null,
+      errorMessage: 'Missing image file'
     };
   } catch (error) {
     const errorMessage = handleErrorMessage(error);

@@ -23,7 +23,7 @@ function MessageBox({ message, pos = 'left', isLast, sessionId }: Props): JSX.El
   return (
     <div className={`${styles['message-container']} ${isRight ? styles['message-right'] : ''}`}>
       <div className={`${styles.message} ${isRight ? styles['avatar-right'] : ''}`}>
-        <Avatar imagePath={message.sender?.image} />
+        <Avatar imagePath={message.sender?.image} noActiveIcon />
         <div className={styles['message-text']}>
           <Typography sx={{ alignSelf: isRight ? 'flex-end' : 'flex-start' }} variant='body2'>
             <strong className={styles['message-sender']}>{message.sender?.name}</strong>{' '}

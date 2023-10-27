@@ -24,6 +24,7 @@
     "date-fns": "^2.30.0",
     "eslint-config-next": "13.4.13",
     "formik": "^2.4.3",
+    "lodash": "^4.17.21",
     "mongodb": "^5.7.0",
     "next": "13.4.13",
     "next-auth": "^4.22.5",
@@ -32,11 +33,13 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
+    "sharp": "^0.32.5",
     "yup": "^1.2.0",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/lodash": "^4.14.197",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "eslint": "8.46.0",
     "eslint-config-prettier": "^9.0.0",

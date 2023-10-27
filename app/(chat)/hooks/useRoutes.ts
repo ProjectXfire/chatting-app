@@ -1,9 +1,7 @@
 import { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import { Chat, ExitToApp, Group } from '@mui/icons-material';
-import { signOut } from 'next-auth/react';
 import { type IRoute } from '../interfaces';
-import { useConversation } from './useConversation';
 
 interface IHookReturn {
   routes: IRoute[];
@@ -11,7 +9,6 @@ interface IHookReturn {
 
 export function useRoutes(): IHookReturn {
   const pathname = usePathname();
-  const { conversationId } = useConversation();
 
   const routes = useMemo(
     () => [
@@ -19,7 +16,7 @@ export function useRoutes(): IHookReturn {
         label: 'Chat',
         href: '/conversations',
         icon: Chat,
-        active: pathname === '/conversations' || Boolean(conversationId)
+        active: pathname === '/conversations'
       },
       {
         label: 'Home',
@@ -31,12 +28,10 @@ export function useRoutes(): IHookReturn {
         label: 'Logout',
         href: '#',
         icon: ExitToApp,
-        onClick: () => {
-          void signOut();
-        }
+        isLogout: true
       }
     ],
-    [pathname, conversationId]
+    [pathname]
   );
 
   return {

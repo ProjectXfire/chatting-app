@@ -3,3 +3,4 @@ export { default as AuthLogin } from './AuthForm/AuthLogin';
 export { default as AuthRegister } from './AuthForm/AuthRegister';
 export { default as FormHeader } from './AuthForm/FormHeader';
 export { default as SocialLogin } from './AuthForm/SocialLogin';
+export { default as Online } from './Online/Online';

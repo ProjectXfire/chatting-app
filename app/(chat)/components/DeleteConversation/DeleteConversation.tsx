@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useModal } from '@/shared/states';
 import styles from './DeleteConversation.module.css';
 import { deleteConversation } from '../../services';
@@ -17,7 +16,6 @@ interface Props {
 
 function DeleteConversation({ conversationId, sessionId, onSubmit }: Props): JSX.Element {
   const { close } = useModal();
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const onDelete = async (): Promise<void> => {
@@ -25,8 +23,6 @@ function DeleteConversation({ conversationId, sessionId, onSubmit }: Props): JSX
     const { successfulMessage, errorMessage } = await deleteConversation(conversationId, sessionId);
     if (successfulMessage !== null) {
       toast.success(successfulMessage);
-      router.push('/conversations');
-      router.refresh();
     } else {
       toast.error(errorMessage);
     }

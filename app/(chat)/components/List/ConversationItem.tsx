@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import styles from './List.module.css';
 import { type IMessage, type IConversation } from '../../interfaces';
-import { useSidebar } from '@/shared/states';
+import { useOnline, useSidebar } from '@/shared/states';
 import { useOtherUser } from '../../hooks';
 import { maxString } from '@/shared/helpers';
 import { ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography } from '@mui/material';
@@ -20,6 +20,7 @@ function ConversationItem({ conversation, sessionId }: Props): JSX.Element {
   const router = useRouter();
   const { close } = useSidebar();
   const { otherUser } = useOtherUser(conversation, sessionId);
+  const onlineUsers = useOnline((state) => state.members);
 
   const lastMessage = useMemo<IMessage | undefined>(() => {
     const messages = conversation.messages ?? [];
@@ -36,10 +37,19 @@ function ConversationItem({ conversation, sessionId }: Props): JSX.Element {
     if (lastMessage === undefined) return 'Started a conversation';
     if (lastMessage.image !== null && lastMessage.image !== undefined) return 'Sent an image';
     return lastMessage.body;
-  }, []);
+  }, [lastMessage]);
+
+  const isOnline = useMemo(() => {
+    if (otherUser === null) return false;
+    const firstCheck = onlineUsers[otherUser.id];
+    if (firstCheck === undefined) {
+      return Boolean(otherUser.online);
+    }
+    return Boolean(firstCheck);
+  }, [onlineUsers]);
 
   const openConversation = async (id: string): Promise<void> => {
-    router.push(`/conversations/${id}`);
+    router.push(`/conversations?id=${id}`);
     close();
   };
 
@@ -66,14 +76,14 @@ function ConversationItem({ conversation, sessionId }: Props): JSX.Element {
           {conversation.isGroup ? (
             <Avatar multipleImage={conversation.users} />
           ) : (
-            <Avatar imagePath={otherUser?.image} />
+            <Avatar imagePath={otherUser?.image} isActive={isOnline} />
           )}
         </ListItemAvatar>
         <ListItemText
           primary={conversation.name ?? otherUser?.name}
           secondary={
             <span className={hasSeen ? '' : styles['no-seen']}>
-              {maxString(lastMessageText ?? '', 13)}
+              {maxString(lastMessageText ?? '', 19)}
             </span>
           }
         />

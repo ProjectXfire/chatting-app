@@ -1,8 +1,8 @@
 'use client';
 
 import NextImage from 'next/image';
-import { type IUser } from '@/app/(chat)/interfaces';
 import styles from './Avatar.module.css';
+import { type IUser } from '@/app/(chat)/interfaces';
 import { Avatar as MuiAvatar } from '@mui/material';
 
 interface Props {
@@ -12,12 +12,19 @@ interface Props {
   multipleImage?: IUser[];
 }
 
-function Avatar({ imagePath, isActive, noActiveIcon = false, multipleImage }: Props): JSX.Element {
+function Avatar({
+  imagePath,
+  isActive = false,
+  noActiveIcon = false,
+  multipleImage
+}: Props): JSX.Element {
   if (imagePath !== undefined && imagePath !== null)
     return (
       <div className={styles.avatar}>
         <MuiAvatar src={imagePath} alt='avatar' />
-        {!noActiveIcon && <span className={styles.active} />}
+        {!noActiveIcon && (
+          <span className={`${styles.active} ${isActive ? styles.online : styles.offline}`} />
+        )}
       </div>
     );
 
@@ -60,7 +67,9 @@ function Avatar({ imagePath, isActive, noActiveIcon = false, multipleImage }: Pr
   return (
     <div className={styles.avatar}>
       <MuiAvatar src='/images/placeholder.jpg' alt='avatar' />
-      {!noActiveIcon && <span className={styles.active} />}
+      {!noActiveIcon && (
+        <span className={`${styles.active} ${isActive ? styles.online : styles.offline}`} />
+      )}
     </div>
   );
 }
