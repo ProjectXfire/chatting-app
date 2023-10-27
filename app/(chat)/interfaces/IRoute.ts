@@ -6,5 +6,5 @@ export interface IRoute {
   href: string;
   icon: OverridableComponent<SvgIconTypeMap<Record<string, unknown>, 'svg'>> & { muiName: string };
   active?: boolean;
-  onClick?: () => void;
+  isLogout?: boolean;
 }

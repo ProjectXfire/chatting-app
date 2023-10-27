@@ -1,8 +1,8 @@
 export { default as AddMembers } from './AddMembers/AddMembers';
+export { default as ChatBody } from './ChatContainers/ChatBody';
 export { default as ChatContainer } from './ChatContainers/ChatContainer';
-export { default as ConversationSection } from './ChatContainers/ConversationSection';
+export { default as Conversation } from './ChatContainers/Conversation';
 export { default as ConversationsSection } from './ChatContainers/ConversationsSection';
-export { default as SideOptionsSection } from './ChatContainers/SideOptionsSection';
 export { default as UserSection } from './ChatContainers/UserSection';
 export { default as ChatSettings } from './ChatSettings/ChatSettings';
 export { default as ConversationHeader } from './ConversationHeader/ConversationHeader';

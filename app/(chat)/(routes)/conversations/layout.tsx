@@ -1,31 +1,8 @@
-import { redirect } from 'next/navigation';
-import { getCurrentSession } from '@/app/(auth)/services/session';
-import {
-  ChatContainer,
-  ConversationSection,
-  ConversationsSection,
-  SideOptionsSection
-} from '../../components';
-import { getConversations } from '../../services/conversation';
-
 interface Props {
   children: React.ReactNode;
 }
 
-async function ConversationsLayout({ children }: Props): Promise<JSX.Element> {
-  const session = await getCurrentSession();
-
-  if (session === null) redirect('/');
-
-  const { data } = await getConversations(session.id);
-
-  return (
-    <ChatContainer>
-      <SideOptionsSection>
-        <ConversationsSection conversations={data} user={session} />
-      </SideOptionsSection>
-      <ConversationSection>{children}</ConversationSection>
-    </ChatContainer>
-  );
+function ConversationsLayout({ children }: Props): JSX.Element {
+  return <main>{children}</main>;
 }
 export default ConversationsLayout;

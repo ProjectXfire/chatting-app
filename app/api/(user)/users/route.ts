@@ -22,7 +22,8 @@ export async function POST(req: NextRequest): Promise<NextResponse<IResponse<IUs
         imageCode: true,
         conversations: true,
         messages: true,
-        seenMessages: true
+        seenMessages: true,
+        online: true
       }
     });
     return NextResponse.json(

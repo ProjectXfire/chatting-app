@@ -25,7 +25,14 @@
   right: 0;
   border: 1px solid var(--white);
   border-radius: 50%;
+}
+
+.online {
   background-color: var(--success);
+}
+
+.offline {
+  background-color: var(--error);
 }
 
 .avatar-card {

@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import prismaDb from '@/shared/libs/prismadb';
+import { pusherServer } from '@/shared/libs/pusher';
 import { type IResponse } from '@/shared/interfaces';
 import { type IConversation } from '@/app/(chat)/interfaces';
 import { type ICreateConversationDto } from '@/app/(chat)/dtos';
@@ -64,6 +65,11 @@ export async function POST(
         },
         include: { users: true }
       });
+
+      newGroupConversation.userIds.forEach((userId) => {
+        void pusherServer.trigger(userId, 'conversation:new', newGroupConversation);
+      });
+
       return NextResponse.json(
         {
           data: newGroupConversation,
@@ -101,6 +107,11 @@ export async function POST(
       data: { users: { connect: [{ id: sessionId }, { id: userId }] }, isGroup },
       include: { users: true }
     });
+
+    newSingleConversation.userIds.forEach((userId) => {
+      void pusherServer.trigger(userId, 'conversation:new', newSingleConversation);
+    });
+
     return NextResponse.json(
       {
         data: newSingleConversation,

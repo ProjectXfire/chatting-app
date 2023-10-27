@@ -1,3 +1,5 @@
+'use client';
+
 import styles from './Menu.module.css';
 import { type IRoute } from '../../interfaces';
 import { MenuItem } from '..';

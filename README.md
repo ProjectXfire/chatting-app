@@ -35,4 +35,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## Prisma
 
+pnpx prisma generate
 pnpx prisma db push

@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import prismaDb from '@/shared/libs/prismadb';
+import { pusherServer } from '@/shared/libs/pusher';
 import { type IResponse } from '@/shared/interfaces';
 import { type IConversation } from '@/app/(chat)/interfaces';
 
@@ -89,8 +90,8 @@ export async function DELETE(
   { params }: { params: { conversationId: string } }
 ): Promise<NextResponse<IResponse<null>>> {
   try {
-    const id = params.conversationId;
-    if (id === undefined)
+    const { conversationId } = params;
+    if (conversationId === undefined)
       return NextResponse.json(
         { data: null, successfulMessage: null, errorMessage: 'Invalid id conversation' },
         { status: 400 }
@@ -103,7 +104,7 @@ export async function DELETE(
         { status: 401 }
       );
     const existingConversation = await prismaDb.conversation.findUnique({
-      where: { id },
+      where: { id: conversationId },
       include: { users: true }
     });
     if (existingConversation === null)
@@ -111,7 +112,19 @@ export async function DELETE(
         { data: null, successfulMessage: null, errorMessage: 'No conversation found' },
         { status: 400 }
       );
-    await prismaDb.conversation.deleteMany({ where: { id, userIds: { hasSome: [userId] } } });
+    await prismaDb.conversation.deleteMany({
+      where: { id: conversationId, userIds: { hasSome: [userId] } }
+    });
+
+    // eslint-disable-next-line @typescript-eslint/promise-function-async
+    const promises = existingConversation.users.map((user) => {
+      return updateConversationIds(user.id, conversationId, user.conversationIds);
+    });
+    await Promise.all(promises);
+
+    existingConversation.users.forEach((user) => {
+      void pusherServer.trigger(user.id, 'conversation:delete', conversationId);
+    });
     return NextResponse.json(
       {
         data: null,
@@ -126,4 +139,17 @@ export async function DELETE(
       { status: 500 }
     );
   }
+}
+
+async function updateConversationIds(
+  userId: string,
+  conversationId: string,
+  conversationIds: string[]
+): Promise<void> {
+  await prismaDb.user.update({
+    where: { id: userId },
+    data: {
+      conversationIds: { set: conversationIds.filter((cId) => cId !== conversationId) }
+    }
+  });
 }

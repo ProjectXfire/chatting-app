@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import prismaDb from '@/shared/libs/prismadb';
+import { pusherServer } from '@/shared/libs/pusher';
 import { type IResponse } from '@/shared/interfaces';
 import { type IUser } from '@/app/(chat)/interfaces';
 
@@ -14,8 +15,9 @@ export async function GET(
         { data: null, successfulMessage: null, errorMessage: 'Invalid email param' },
         { status: 400 }
       );
-    const currentUser = await prismaDb.user.findUnique({
+    const currentUser = await prismaDb.user.update({
       where: { email },
+      data: { online: true },
       select: {
         id: true,
         name: true,
@@ -24,9 +26,11 @@ export async function GET(
         imageCode: true,
         conversations: true,
         messages: true,
-        seenMessages: true
+        seenMessages: true,
+        online: true
       }
     });
+    await pusherServer.trigger('online', 'user:status', { online: true, id: currentUser.id });
     return NextResponse.json(
       { data: currentUser, successfulMessage: 'User loaded successfully', errorMessage: null },
       { status: 200 }
@@ -51,12 +55,25 @@ export async function PATCH(
         { status: 200 }
       );
     }
-    const { name, image, imageCode } = await req.json();
-    if (name === undefined || image === undefined || imageCode === undefined)
+    const { name, image, imageCode, online } = await req.json();
+    if (
+      name === undefined &&
+      image === undefined &&
+      imageCode === undefined &&
+      online === undefined
+    )
       return NextResponse.json(
-        { data: null, successfulMessage: null, errorMessage: 'Some values are missing' },
+        { data: null, successfulMessage: null, errorMessage: 'Nothing to update' },
         { status: 200 }
       );
+    if (typeof online === 'boolean') {
+      await prismaDb.user.update({ where: { id: userId }, data: { online } });
+      await pusherServer.trigger('online', 'user:status', { online, id: userId });
+      return NextResponse.json(
+        { data: null, successfulMessage: 'User updated', errorMessage: null },
+        { status: 200 }
+      );
+    }
     await prismaDb.user.update({ where: { id: userId }, data: { image, imageCode, name } });
     return NextResponse.json(
       { data: null, successfulMessage: 'User updated', errorMessage: null },

@@ -5,6 +5,7 @@ export interface IUser {
   id: string;
   name?: string | null;
   email?: string | null;
+  online?: boolean | null;
   image?: string | null;
   imageCode?: string | null;
   conversations?: IConversation[];
